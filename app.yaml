@@ -1,0 +1,36 @@
+command:
+  - uvicorn
+  - main:app
+  - --host
+  - 0.0.0.0
+  - --port
+  - "$DATABRICKS_APP_PORT"
+
+env:
+  - name: DATABRICKS_HOST
+    valueFrom: sql-api-v4-host
+  - name: DATABRICKS_HTTP_PATH
+    valueFrom: sql-api-v4-http-path
+  - name: APP_AUTH_MODE
+    valueFrom: sql-api-v4-auth-mode
+
+resources:
+  - name: sql-api-v4-warehouse
+    sql_warehouse:
+      id: "<set-warehouse-id>"
+      permission: CAN_USE
+  - name: sql-api-v4-host
+    secret:
+      scope: sql-api-v4-app
+      key: databricks-host
+      permission: READ
+  - name: sql-api-v4-http-path
+    secret:
+      scope: sql-api-v4-app
+      key: databricks-http-path
+      permission: READ
+  - name: sql-api-v4-auth-mode
+    secret:
+      scope: sql-api-v4-app
+      key: app-auth-mode
+      permission: READ
